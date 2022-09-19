@@ -54,20 +54,47 @@ async function getUsers() {
 }
 
 
+/* SELECT NA TABELA SENSORES */
+
+async function getSensors() {
+    const sensors = await Sensores.findAll();
+    return sensors;
+}
+
+
 /* INSERT NA TABELA SENSORES */
+
+async function saveSensors(sensors) {
+    
+}
 
 
 /* ENDPOINT */
+
+app.use(express.json());
 
 app.get('/', async function (req, res) {
     res.json(await getUsers());
 });
 
+
 app.post('/sensores', async function (req, res) {
-    return req.json({
-        erro: false,
-        mensagem: "Sensor cadastrado com sucesso!"
-    });
+
+    const dataSensors = await getSensors();
+
+    await saveSensors(req.body)
+        .then(() => {
+            return res.json({
+                erro: false,
+                mensagem: "Sensor cadastrado com sucesso!"
+            });
+        }).catch(() => {
+            return res.json({
+                erro: true,
+                mensagem: "Erro: Sensor já cadastrado!"
+            });
+        });
+
 });
 
 app.listen(port, () => {
