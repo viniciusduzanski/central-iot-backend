@@ -33,9 +33,17 @@ const Login = sequelize.define(
     { timestamps: false }
 );
 
-async function createTable() {
-    Login.sync();
-}
+const Sensores = sequelize.define(
+    "sensores",
+    { id_dispositivo: Sequelize.INTEGER, id_sensor: Sequelize.INTEGER, empresa: Sequelize.STRING, grandeza: Sequelize.STRING },
+    { timestamps: false }
+);
+
+// createTable();
+
+// async function createTable() {
+//     Sensores.sync();
+// }
 
 
 /* SELECT NA TABELA ACESSOS */
@@ -45,14 +53,22 @@ async function getUsers() {
     return users;
 }
 
-/**********************************/
+
+/* INSERT NA TABELA SENSORES */
 
 
 /* ENDPOINT */
 
 app.get('/', async function (req, res) {
     res.json(await getUsers());
-})
+});
+
+app.post('/sensores', async function (req, res) {
+    return req.json({
+        erro: false,
+        mensagem: "Sensor cadastrado com sucesso!"
+    });
+});
 
 app.listen(port, () => {
     console.info("Aplicação rodando em http://localhost:3000");
