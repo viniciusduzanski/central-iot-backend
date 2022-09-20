@@ -36,7 +36,7 @@ const Login = sequelize.define(
 const Sensores = sequelize.define(
     "sensores",
     { id_dispositivo: Sequelize.INTEGER, id_sensor: Sequelize.INTEGER, empresa: Sequelize.STRING, grandeza: Sequelize.STRING },
-    { timestamps: false }
+    { timestamps: false, indexes: [{unique: true, fields: ["id_dispositivo", "id_sensor"]}]}
 );
 
 // createTable();
@@ -56,16 +56,16 @@ async function getUsers() {
 
 /* SELECT NA TABELA SENSORES */
 
-async function getSensors() {
-    const sensors = await Sensores.findAll();
-    return sensors;
-}
+// async function getSensors(dispositivo, sensor) {
+//     const sensors = await Sensores.findOne(dispositivo, sensor);
+//     return sensors;
+// }
 
 
 /* INSERT NA TABELA SENSORES */
 
-async function saveSensors(sensors) {
-    
+async function saveSensors(sensor) {
+    await Sensores.create({...sensor, id_dispositivo: Number(sensor.idDispositivo), id_sensor: Number(sensor.idSensor)});
 }
 
 
@@ -79,9 +79,7 @@ app.get('/', async function (req, res) {
 
 
 app.post('/sensores', async function (req, res) {
-
-    const dataSensors = await getSensors();
-
+    
     await saveSensors(req.body)
         .then(() => {
             return res.json({
@@ -89,7 +87,7 @@ app.post('/sensores', async function (req, res) {
                 mensagem: "Sensor cadastrado com sucesso!"
             });
         }).catch(() => {
-            return res.json({
+            return res.status(400).json({
                 erro: true,
                 mensagem: "Erro: Sensor já cadastrado!"
             });
@@ -100,11 +98,6 @@ app.post('/sensores', async function (req, res) {
 app.listen(port, () => {
     console.info("Aplicação rodando em http://localhost:3000");
 });
-
-
-
-
-
 
 
 
