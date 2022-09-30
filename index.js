@@ -35,7 +35,7 @@ const Login = sequelize.define(
 
 const Sensores = sequelize.define(
     "sensores",
-    { id_dispositivo: Sequelize.INTEGER, id_sensor: Sequelize.INTEGER, empresa: Sequelize.STRING, grandeza: Sequelize.STRING },
+    { id_dispositivo: Sequelize.INTEGER, id_sensor: Sequelize.INTEGER, empresa: Sequelize.STRING },
     { timestamps: false, indexes: [{unique: true, fields: ["id_dispositivo", "id_sensor"]}]}
 );
 
