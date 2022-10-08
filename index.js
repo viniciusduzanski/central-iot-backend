@@ -62,13 +62,9 @@ async function getUsers() {
 }
 
 async function getData(idDispositivo, dtInicial, dtFinal) {
-    const dataInicial = new Date(dtInicial);
-    const dataFinal = new Date(dtFinal);
+    const dataInicial = new Date(dtInicial).toISOString();
+    const dataFinal = new Date(dtFinal).toISOString();
 
-    console.log(startOfDay(new Date(2022, 09, 10, 11, 00, 00)));
-
-    // const dataInicial = new Date("2022-09-01 09:00:00");
-    // const dataFinal = new Date("2022-09-11 23:00:00");
 
     const data = await Dados.findAll({
         where: {
@@ -78,7 +74,12 @@ async function getData(idDispositivo, dtInicial, dtFinal) {
             }
         }
     });
-    return data;
+    return data.map((obj) => {
+        return {
+            ...obj.dataValues,
+            data_hora: new Date(obj.data_hora).toLocaleString("pt-BR")
+        }
+    })
 }
 
 
@@ -125,7 +126,7 @@ app.post('/sensores', async function (req, res) {
 
 
 app.get('/dados', async function (req, res) {
-    
+
     const { idDispositivo, dtInicial, dtFinal } = req.query;
     res.json(await getData(idDispositivo, dtInicial, dtFinal));
 });
