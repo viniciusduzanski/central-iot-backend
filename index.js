@@ -138,9 +138,6 @@ app.listen(port, () => {
 });
 
 
-
-
-
 /* async function criarUsuario(){
     const usuarioCriado = await Login.create({
         usuario: "teste1",
