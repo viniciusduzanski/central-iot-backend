@@ -10,11 +10,13 @@ require('dotenv').config()
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialectOptions: {
+        useUTC: true,
         ssl: {
             require: true,
             rejectUnauthorized: false
         }
-    }
+    },
+    timezone: '+00:00'
 })
 
 sequelize
@@ -47,12 +49,19 @@ const Dados = sequelize.define(
     { timestamps: false }
 );
 
+const Teste = sequelize.define(
+    "teste",
+    { data_hora: Sequelize.DATE, id_dispositivo: Sequelize.INTEGER, id_sensor: Sequelize.INTEGER, valor: Sequelize.INTEGER, grandeza: Sequelize.STRING },
+    { timestamps: true }
+);
+
 // createTable();
 
 // async function createTable() {
-//     Dados.sync();
+//     Teste.sync();
 // }
 
+criarDado();
 
 /* SELECT NA TABELA ACESSOS */
 
@@ -67,6 +76,27 @@ async function getData(idDispositivo, dtInicial, dtFinal) {
 
 
     const data = await Dados.findAll({
+        where: {
+            id_dispositivo: idDispositivo,
+            data_hora: {
+                [Op.between]: [dataInicial, dataFinal]
+            }
+        }
+    });
+    return data.map((obj) => {
+        return {
+            ...obj.dataValues,
+            data_hora: new Date(obj.data_hora).toLocaleString("pt-BR")
+        }
+    })
+}
+
+async function getData2(idDispositivo, dtInicial, dtFinal) {
+    const dataInicial = new Date(dtInicial).toISOString();
+    const dataFinal = new Date(dtFinal).toISOString();
+
+
+    const data = await Teste.findAll({
         where: {
             id_dispositivo: idDispositivo,
             data_hora: {
@@ -128,7 +158,7 @@ app.post('/sensores', async function (req, res) {
 app.get('/dados', async function (req, res) {
 
     const { idDispositivo, dtInicial, dtFinal } = req.query;
-    res.json(await getData(idDispositivo, dtInicial, dtFinal));
+    res.json(await getData2(idDispositivo, dtInicial, dtFinal));
 });
 
 
@@ -138,11 +168,14 @@ app.listen(port, () => {
 });
 
 
-/* async function criarUsuario(){
-    const usuarioCriado = await Login.create({
-        usuario: "teste1",
-        senha: "teste1"
+async function criarDado(){
+    const dadoCriado = await Teste.create({
+        data_hora: "2022-10-12T15:30:00Z",
+        id_dispositivo: 202210,
+        id_sensor: 333,
+        valor: 500,
+        grandeza: "V"
       });
-      console.log(usuarioCriado)
+      console.log(dadoCriado);
 }
-*/
+
