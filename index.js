@@ -49,19 +49,14 @@ const Dados = sequelize.define(
     { timestamps: false }
 );
 
-const Teste = sequelize.define(
-    "teste",
-    { data_hora: Sequelize.DATE, id_dispositivo: Sequelize.INTEGER, id_sensor: Sequelize.INTEGER, valor: Sequelize.INTEGER, grandeza: Sequelize.STRING },
-    { timestamps: true }
-);
 
 // createTable();
 
 // async function createTable() {
-//     Teste.sync();
+//     Dados.sync();
 // }
 
-criarDado();
+// criarDado();
 
 /* SELECT NA TABELA ACESSOS */
 
@@ -168,14 +163,14 @@ app.listen(port, () => {
 });
 
 
-async function criarDado(){
-    const dadoCriado = await Teste.create({
-        data_hora: "2022-10-12T15:30:00Z",
-        id_dispositivo: 202210,
-        id_sensor: 333,
-        valor: 500,
-        grandeza: "V"
-      });
-      console.log(dadoCriado);
-}
+// async function criarDado(){
+//     const dadoCriado = await Dados.create({
+//         data_hora: "2022-10-12T15:30:00Z",
+//         id_dispositivo: 202210,
+//         id_sensor: 333,
+//         valor: 500,
+//         grandeza: "V"
+//       });
+//       console.log(dadoCriado);
+// }
 
