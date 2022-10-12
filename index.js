@@ -10,13 +10,13 @@ require('dotenv').config()
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialectOptions: {
-        useUTC: true,
+        // useUTC: true,
         ssl: {
             require: true,
             rejectUnauthorized: false
         }
     },
-    timezone: '+00:00'
+    // timezone: '+00:00'
 })
 
 sequelize
