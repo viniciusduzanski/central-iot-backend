@@ -10,13 +10,13 @@ require('dotenv').config()
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialectOptions: {
-        // useUTC: true,
+        useUTC: true,
         ssl: {
             require: true,
             rejectUnauthorized: false
         }
     },
-    // timezone: '+00:00'
+    timezone: '+00:00'
 })
 
 sequelize
@@ -49,20 +49,13 @@ const Dados = sequelize.define(
     { timestamps: false }
 );
 
-const Teste = sequelize.define(
-    "teste",
-    { data_hora: Sequelize.DATE, id_dispositivo: Sequelize.INTEGER, id_sensor: Sequelize.INTEGER, valor: Sequelize.INTEGER, grandeza: Sequelize.STRING },
-    { timestamps: false }
-);
+// createTable();
 
+// async function createTable() {
+//     Dados.sync();
+// }
 
-createTable();
-
-async function createTable() {
-    Teste.sync();
-}
-
-criarDado();
+// criarDado();
 
 /* SELECT NA TABELA ACESSOS */
 
@@ -76,7 +69,7 @@ async function getData(idDispositivo, dtInicial, dtFinal) {
     const dataFinal = new Date(dtFinal).toISOString();
 
 
-    const data = await Teste.findAll({
+    const data = await Dados.findAll({
         where: {
             id_dispositivo: idDispositivo,
             data_hora: {
@@ -147,14 +140,14 @@ app.listen(port, () => {
 });
 
 
-async function criarDado(){
-    const dadoCriado = await Teste.create({
-        data_hora: "2022-10-12T15:30:00Z",
-        id_dispositivo: 202210,
-        id_sensor: 333,
-        valor: 500,
-        grandeza: "V"
-      });
-      console.log(dadoCriado);
-}
+// async function criarDado(){
+//     const dadoCriado = await Dados.create({
+//         data_hora: "2022-10-12T16:42:00Z",
+//         id_dispositivo: 202210,
+//         id_sensor: 333,
+//         valor: 500,
+//         grandeza: "V"
+//       });
+//       console.log(dadoCriado);
+// }
 
