@@ -153,7 +153,7 @@ app.post('/sensores', async function (req, res) {
 app.get('/dados', async function (req, res) {
 
     const { idDispositivo, dtInicial, dtFinal } = req.query;
-    res.json(await getData2(idDispositivo, dtInicial, dtFinal));
+    res.json(await getData(idDispositivo, dtInicial, dtFinal));
 });
 
 
