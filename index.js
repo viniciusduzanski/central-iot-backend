@@ -1,12 +1,18 @@
 const { Sequelize, Op } = require('sequelize');
 const express = require('express');
-const { startOfDay, parseISO } = require('date-fns');
-const app = express();
 const cors = require('cors');
+const app = express();
+const { startOfDay, parseISO } = require('date-fns');
 const { utcToZonedTime, zonedTimeToUtc } = require('date-fns-tz');
 const port = process.env.PORT || 3000;
-app.use(cors());
+
 require('dotenv').config()
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    app.use(cors());
+    next();
+});
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialectOptions: {
