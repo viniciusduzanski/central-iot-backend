@@ -9,7 +9,10 @@ const port = process.env.PORT || 3000;
 require('dotenv').config()
 
 app.use((req, res, next) => {
+	//Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
     res.header("Access-Control-Allow-Origin", "*");
+	//Quais são os métodos que a conexão pode realizar na API
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
     app.use(cors());
     next();
 });
@@ -105,6 +108,12 @@ async function saveSensors(sensor) {
     await Sensores.create({ ...sensor, id_dispositivo: Number(sensor.idDispositivo), id_sensor: Number(sensor.idSensor) });
 }
 
+/* INSERT NA TABELA DADOS */
+
+async function saveMeasures(medidas) {
+    await Dados.create(medidas);
+}
+
 
 /* ENDPOINTS */
 
@@ -132,6 +141,22 @@ app.post('/sensores', async function (req, res) {
 
 });
 
+app.post('/salvarmedidas', async function (req, res) {
+
+    await saveMeasures(req.body)
+        .then(() => {
+            return res.json({
+                erro: false,
+                mensagem: "Medida cadastrado com sucesso!"
+            });
+        }).catch(() => {
+            return res.status(400).json({
+                erro: true,
+                mensagem: "Erro: Sensor já cadastrado!"
+            });
+        });
+
+});
 
 app.get('/dados', async function (req, res) {
 
