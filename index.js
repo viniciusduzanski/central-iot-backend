@@ -73,6 +73,11 @@ async function getUsers() {
     return users;
 }
 
+async function getSensors() {
+    const sensors = await Sensores.findAll();
+    return sensors;
+}
+
 async function getData(idDispositivo, dtInicial, dtFinal) {
     const dataInicial = new Date(dtInicial).toISOString();
     const dataFinal = new Date(dtFinal).toISOString();
@@ -121,6 +126,10 @@ app.use(express.json());
 
 app.get('/', async function (req, res) {
     res.json(await getUsers());
+});
+
+app.get('/obtersensores', async function (req, res) {
+    res.json(await getSensors());
 });
 
 
